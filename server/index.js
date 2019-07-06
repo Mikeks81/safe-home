@@ -2,6 +2,9 @@ import "core-js/stable"
 import "regenerator-runtime/runtime"
 import express from 'express'
 import bodyParser from 'body-parser'
+import UserRoutes from './routes/users'
+import ContactRoutes from  './routes/contacts'
+
 const app = express()
 const port = 7321
 
@@ -16,8 +19,8 @@ app.get('/', (request, response) => {
   response.json({ info: 'Node.js, Express, and Postgres API' })
 })
 
-require('./routes/users')(app)
-require('./routes/contacts')(app)
+UserRoutes (app)
+ContactRoutes (app)
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
