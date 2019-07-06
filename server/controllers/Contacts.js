@@ -6,10 +6,9 @@ class Contacts {
     const { id } = req.params
     if (!id) return res.status(400).send('Please provide a user id.')
     try {
-      const query = `SELECT contacts.* AS contacts 
-                      FROM users INNER JOIN contacts 
-                      ON users.id=contacts.owner_id 
-                      WHERE users.id=$1`
+      const query = `SELECT * 
+                      FROM contacts 
+                      WHERE owner_id=$1`
       const { rows, rowCount } = await db.query(query, [id])
       return res.status(200).send({ rows, rowCount })
       
@@ -22,10 +21,10 @@ class Contacts {
     const { id, contact_id } = req.params
     if (!id || !contact_id) return res.status(400).send(`Please provide a user id or contact_id.`)
     try {
-      const query = `SELECT contacts.* AS contacts 
-                      FROM users INNER JOIN contacts 
-                      ON users.id=contacts.owner_id 
-                      WHERE users.id=$1 AND contacts.id=$2`
+      const query = `SELECT * 
+                      FROM contacts 
+                      WHERE owner_id=$1 
+                      AND contacts.id=$2`
       const { rows } = await db.query(query, [id, contact_id])
       return res.status(200).send( rows )
     } catch (err) {
@@ -38,10 +37,9 @@ class Contacts {
     if (!id) return res.status(400).send(this.noUserIdMessage())
     try {
       const { fname, lname, phone, email } = req.body
-      const query = `INSERT INTO 
-        contacts(fname, lname, phone, email, owner_id) 
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *`
+      const query = `INSERT INTO contacts(fname, lname, phone, email, owner_id) 
+                      VALUES ($1, $2, $3, $4, $5)
+                      RETURNING *`
       const values = [
         fname,
         lname,
@@ -58,8 +56,10 @@ class Contacts {
   }
 
   async update (req, res) {
-    
+    const { id, contact_id } = req.params
+    if (!id || !contact_id) return res.status(400).send(`Please provide a user id or contact_id.`)
   }
+
   async delete (req, res) {
     const { id, contact_id } = req.params
     if (!id || !contact_id) return res.status(400).send(`Please provide a user id or contact_id.`)
