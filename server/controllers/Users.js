@@ -18,10 +18,10 @@ class User {
     try {
       const { id } = req.params
       const { rows, rowCount } = await db.query(query, [id])
-      if (!rows.length) res.status(404).send('User not found')
+      if (!rows.length) return res.status(404).send('User not found')
       return res.status(200).send({ rows, rowCount, params: req.params })
     } catch (err) {
-      res.status(400).send(err)
+      return res.status(400).send(err)
     }
   }
 
@@ -97,7 +97,7 @@ class User {
 
   async delete (req, res) {
     const { id } = req.params
-    if (!id) res.status(400).send({ 'message': 'Missing Id' })
+    if (!id) return res.status(400).send({ 'message': 'Missing Id' })
     const query = 'DELETE FROM users WHERE id = $1 RETURNING *'
     try {
       const { rows } = await db.query(query, [id])
