@@ -6,7 +6,7 @@ import UserRoutes from './routes/users'
 import ContactRoutes from  './routes/contacts'
 
 const app = express()
-const port = 7321
+const port = process.env.PORT || 7321
 
 app.use(bodyParser.json())
 app.use(
@@ -22,6 +22,10 @@ app.get('/', (request, response) => {
 UserRoutes (app)
 ContactRoutes (app)
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}.`)
-})
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`App running on port ${port}.`)
+  })
+}
+
+export default app
