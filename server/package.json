@@ -27,8 +27,10 @@
     "mocha": "^6.1.4"
   },
   "scripts": {
+    "start": "yarn dev",
     "test": "NODE_ENV=test mocha --require @babel/register --recursive **/*.test.js --exit",
     "build": "babel index.js --out-file build.js",
-    "start": "babel-watch index.js"
+    "dev": "NODE_ENV=development babel-watch index.js",
+    "prod": "NODE_ENV=production index.js"
   }
 }
