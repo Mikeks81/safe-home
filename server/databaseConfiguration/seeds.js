@@ -4,6 +4,7 @@ const { dbEnv } = require('./db_config')
 const { dropTable, init, createTable } = require('./db_init')
 
 const pool = new Pool(dbEnv)
+const numOfUsers = 15
 
 const query = async (queryText, params, localPool = pool) => {
   try {
@@ -14,18 +15,31 @@ const query = async (queryText, params, localPool = pool) => {
   }
 }
 
+const getRandomInt = (max, min = 1) => {
+    return Math.round(Math.random() * (max - min) + min);
+}
+
 const generateArr = num => Array.from(new Array(num), (x, i) => i)
 
-const createUsers = async () => {
-  const tableName = 'users'
-  const numOfSeeds = 15
+const preSeed = async (tableName) => {
   // drop the table before we seed
   await dropTable(tableName)
   // recreate the users table
   await createTable(tableName)
+}
+
+const log = (numOfSeeds, tableName) => {
+  console.log(`========== SEEDING ${numOfSeeds} to TABLE: ${tableName} ===========`)
+}
+
+const createUsers = async () => {
+  const tableName = 'users'
+  const numOfSeeds = numOfUsers
+  // clear previous records and start table fresh
+  await preSeed(tableName)
   // create an array for he number of recrods to seed
   const arr = generateArr(numOfSeeds)
-  console.log(`========== SEEDING ${numOfSeeds} to TABLE: ${tableName} ===========`);
+  log(numOfSeeds, tableName)
   const queryText = `INSERT INTO
     "${tableName}"(fname, lname, email, password, phone)
     VALUES($1, $2, $3, $4, $5)
@@ -40,11 +54,27 @@ const createUsers = async () => {
     ];
     await query(queryText, values)
   }
-  process.exit(0)
 }
 
-const createContacts = () => {
-  
+const createContacts = async () => {
+  const tableName = 'contacts'
+  const numOfSeeds = 40
+  await preSeed(tableName)
+  const arr = generateArr(numOfSeeds)
+  log(numOfSeeds, tableName)
+  const queryText = `INSERT INTO "${tableName}"(fname, lname, phone, email, owner_id) 
+                      VALUES ($1, $2, $3, $4, $5)
+                      RETURNING *`
+  for (const i of arr) {
+    const values = [
+      faker.name.firstName(),
+      faker.name.lastName(),
+      faker.phone.phoneNumberFormat(),
+      faker.internet.email(),
+      getRandomInt(15)
+    ]
+    await query(queryText, values)
+  }
 }
 
 const createTrips = () => {
@@ -55,4 +85,10 @@ const createCoordinates = () => {
   
 }
 
-createUsers()
+const seed = async () => {
+  await createUsers()
+  await createContacts()
+  process.exit(0)
+}
+
+seed()
