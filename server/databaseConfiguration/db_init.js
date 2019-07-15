@@ -1,39 +1,52 @@
 const { Pool } = require('pg')
+const prompts = require('prompts')
 const schema = require('./schema')
 const { allDb, dbEnv } = require('./db_config')
 const { createAllDBs } = require('./createDatabase')
 
-// const pool = new Pool(dbEnv);
-
-// pool.on('connect', () => {
-//   console.log('connected to the db');
-// });
-
-const query = async (queryText, localPool = pool) => {
+const query = async (queryText, pool) => {
   try {
-    await localPool.query(queryText)
+    await pool.query(queryText)
   } catch (error) {
     console.log({ error })
     process.exit(1)
   }
 }
 
-const dropTable = (table) => {
-  const queryText = `DROP TABLE IF EXISTS "${table}" returning *`;
-  pool.query(queryText)
-    .then((res) => {
-      console.log(res);
-      pool.end();
-    })
-    .catch((err) => {
-      console.log(err);
-      pool.end();
-    });
+const dropTable = async (table) => {
+  const response = await prompts({
+    type: 'confirm',
+    name: 'value',
+    message: `Are you sure you want DROP ${table} and ASSOCIATIONS? Associated records from other tables may be deleted.`,
+    initial: false
+  })
+  
+  if (!response.value) process.exit(0)
+  console.log(`============= DROPPING ${table} and ASSOCIATIONS ============`)
+  const queryText = `DROP TABLE IF EXISTS "${table}" CASCADE`
+  const pool = new Pool(dbEnv)
+  try {
+    await query(queryText, pool)
+    console.log(`Successfully dropped ${table} and CASCADE.`);
+    pool.end();
+  } catch (error) {
+    console.log(error);
+    pool.end();
+  }
 }
 
-// pool.on('remove', () => {
-//   console.log('client removed');
-// });
+const createTable = async (table) => {
+  const queryText = schema[table]
+  if (!queryText) {
+    console.log(`ERROR: Table ${table} does not exist.`)
+    process.exit(0)
+  }
+  const pool = new Pool(dbEnv)
+  console.log(`========= CREATING TABLE: ${table} ============`)
+  await query(queryText, pool)
+  pool.end()
+  console.log(`========= SUCCESSFULLY CREATED TABLE: ${table} ============`)
+}
 
 const init = async () => {
   /** create the DB first */
@@ -43,9 +56,9 @@ const init = async () => {
     // loop through all listed db's in config
     for (const db of dbsArr) {
       console.log(`\r\n==========  CREATING DB: ${allDb[db].database} TABLES ============= \r\n`)
-      const localPool = new Pool(allDb[db])
-      await createTables(localPool)
-      localPool.end()
+      const pool = new Pool(allDb[db])
+      await createTables(pool)
+      pool.end()
     }
     console.log('\r\n************ FIN ***************')
   } catch (err) {
@@ -53,17 +66,18 @@ const init = async () => {
   }
 }
 
-const createTables = async (localPool = pool) => {
+const createTables = async (pool) => {
   const tables = Object.keys(schema)
   for (const table of tables) {
-    await query(schema[table], localPool)
+    await query(schema[table], pool)
     console.log(`CREATED ${table} TABLE.`)
   }
 }
 
 module.exports = {
   init,
-  dropTable
+  dropTable,
+  createTable
 };
 
 require('make-runnable');
