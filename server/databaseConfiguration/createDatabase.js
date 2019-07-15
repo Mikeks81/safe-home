@@ -7,6 +7,7 @@ const pool = new Pool({ creds })
 
 const createAllDBs = () => {
   const dbsArr = Object.keys(allDb)
+  console.log(' ========== CREATING DATABASES ========== \r\n');
   const dbRequests = dbsArr.map(db => {
     return createDB(allDb[db].database)
   })
