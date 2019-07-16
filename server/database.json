@@ -1,0 +1,24 @@
+{
+  "production": {
+    "driver": "pg",
+    "user": {"ENV": "DB_USER"},
+    "host": {"ENV": "DB_HOST"},
+    "password": {"ENV": "DB_PASSWORD"},
+    "database": {"ENV": "DB_NAME"},
+    "port": {"ENV": "DB_PORT"}
+  },
+  "development": {
+    "user": "postgres",
+    "host": "localhost",
+    "password": "",
+    "database": "safe-home-dev",
+    "port": "5432"
+  },
+  "test": {
+    "user": "postgres",
+    "host": "localhost",
+    "password": "",
+    "database": "safe-home-test",
+    "port": "5432"
+  }
+}
