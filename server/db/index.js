@@ -1,10 +1,27 @@
 import { Pool } from 'pg'
-import { dbEnv } from '../databaseConfiguration/db_config'
 import dotenv from 'dotenv'
+import databaseConfig from '../database.json'
 
 dotenv.config();
 
-const pool = new Pool(dbEnv);
+export const dbEnv = () => {
+  const env = process.env.NODE_ENV || 'development'
+  const _dbCreds = databaseConfig[env]
+  const dbCreds = {}
+  Object.keys(_dbCreds).forEach(key => {
+    if (typeof _dbCreds[key] === 'object') {
+      const envVal = _dbCreds[key]['ENV']
+      dbCreds[key] = process.env[envVal]
+    } else {
+      dbCreds[key] = _dbCreds[key]
+    }
+  })
+  return dbCreds
+}
+
+console.log('~~~~~~~ ', dbEnv())
+
+const pool = new Pool(dbEnv());
 
 export default {
   /**

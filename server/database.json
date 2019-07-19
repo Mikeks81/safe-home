@@ -8,6 +8,7 @@
     "port": {"ENV": "DB_PORT"}
   },
   "development": {
+    "driver": "pg",
     "user": "postgres",
     "host": "localhost",
     "password": "",
@@ -15,6 +16,7 @@
     "port": "5432"
   },
   "test": {
+    "driver": "pg",
     "user": "postgres",
     "host": "localhost",
     "password": "",

@@ -1,9 +1,23 @@
 const { Pool } = require('pg')
 const faker = require('faker')
-const { dbEnv } = require('./db_config')
-const { dropTable, init, createTable } = require('./db_init')
+const databaseConfig = require('../database.json')
 
-const pool = new Pool(dbEnv)
+const dbEnv = () => {
+  const env = process.env.NODE_ENV || 'development'
+  const _dbCreds = databaseConfig[env]
+  const dbCreds = {}
+  Object.keys(_dbCreds).forEach(key => {
+    if (typeof _dbCreds[key] === 'object') {
+      const envVal = _dbCreds[key]['ENV']
+      dbCreds[key] = process.env[envVal]
+    } else {
+      dbCreds[key] = _dbCreds[key]
+    }
+  })
+  return dbCreds
+}
+
+const pool = new Pool(dbEnv())
 const numOfUsers = 15
 
 const query = async (queryText, params, localPool = pool) => {
@@ -36,7 +50,7 @@ const createUsers = async () => {
   const tableName = 'users'
   const numOfSeeds = numOfUsers
   // clear previous records and start table fresh
-  await preSeed(tableName)
+  // await preSeed(tableName)
   // create an array for he number of recrods to seed
   const arr = generateArr(numOfSeeds)
   log(numOfSeeds, tableName)
@@ -59,7 +73,7 @@ const createUsers = async () => {
 const createContacts = async () => {
   const tableName = 'contacts'
   const numOfSeeds = 40
-  await preSeed(tableName)
+  // await preSeed(tableName)
   const arr = generateArr(numOfSeeds)
   log(numOfSeeds, tableName)
   const queryText = `INSERT INTO "${tableName}"(fname, lname, phone, email, owner_id) 

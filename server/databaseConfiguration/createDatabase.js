@@ -1,7 +1,7 @@
 const { Pool } = require('pg')
-const { allDb, dbEnv } = require('./db_config')
+// const { allDb, dbEnv } = require('./db_config')
 
-const { database, creds } = dbEnv
+// const { database, creds } = dbEnv
 
 const pool = new Pool({ creds })
 
