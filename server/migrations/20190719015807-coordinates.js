@@ -22,8 +22,8 @@ exports.up = function(db) {
           lat FLOAT,
           long FLOAT,
           trip_id INTEGER NOT NULL,
-          created_date TIMESTAMP DEFAULT NOW(),
-          modified_date TIMESTAMP DEFAULT NOW(),
+          created_at TIMESTAMP DEFAULT NOW(),
+          updated_at TIMESTAMP DEFAULT NOW(),
           FOREIGN KEY (trip_id) REFERENCES coordinates (id) ON DELETE CASCADE
         )`)
 };

@@ -22,10 +22,10 @@ exports.up = function(db) {
         lname TEXT NOT NULL,
         phone VARCHAR(15) UNIQUE NOT NULL,
         email VARCHAR(128) UNIQUE NOT NULL,
-        owner_id INTEGER NOT NULL,
-        created_date TIMESTAMP DEFAULT NOW(),
-        modified_date TIMESTAMP DEFAULT NOW(),
-        FOREIGN KEY (owner_id) REFERENCES users (id) ON DELETE CASCADE
+        user_id INTEGER NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW(),
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
       )`
   )
 };
