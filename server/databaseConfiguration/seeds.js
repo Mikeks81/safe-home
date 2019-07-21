@@ -69,7 +69,7 @@ const createContacts = async () => {
   // await preSeed(tableName)
   const arr = generateArr(numOfSeeds)
   log(numOfSeeds, tableName)
-  const queryText = `INSERT INTO "${tableName}"(fname, lname, phone, email, owner_id) 
+  const queryText = `INSERT INTO "${tableName}"(fname, lname, phone, email, user_id) 
                       VALUES ($1, $2, $3, $4, $5)
                       RETURNING *`
   for (const i of arr) {
