@@ -8,7 +8,7 @@ class Contacts {
     try {
       const query = `SELECT * 
                       FROM contacts 
-                      WHERE owner_id=$1`
+                      WHERE user_id=$1`
       const { rows, rowCount } = await db.query(query, [id])
       return res.status(200).send({ rows, rowCount })
       
@@ -23,7 +23,7 @@ class Contacts {
     try {
       const query = `SELECT * 
                       FROM contacts 
-                      WHERE owner_id=$1 
+                      WHERE user_id=$1 
                       AND contacts.id=$2`
       const { rows } = await db.query(query, [id, contact_id])
       return res.status(200).send( rows )
@@ -37,7 +37,7 @@ class Contacts {
     if (!id) return res.status(400).send(this.noUserIdMessage())
     try {
       const { fname, lname, phone, email } = req.body
-      const query = `INSERT INTO contacts(fname, lname, phone, email, owner_id) 
+      const query = `INSERT INTO contacts(fname, lname, phone, email, user_id) 
                       VALUES ($1, $2, $3, $4, $5)
                       RETURNING *`
       const values = [
@@ -64,7 +64,7 @@ class Contacts {
     const { id, contact_id } = req.params
     if (!id || !contact_id) return res.status(400).send(`Please provide a user id or contact_id.`)
     try {
-      const query = `DELETE FROM contacts WHERE owner_id=$1 AND id=$2 RETURNING *`
+      const query = `DELETE FROM contacts WHERE user_id=$1 AND id=$2 RETURNING *`
       const { rows } = await db.query(query, [id, contact_id])
 
       if (!rows[0]) return res.status(400).send(' User contact not found and could not be deleted.')
