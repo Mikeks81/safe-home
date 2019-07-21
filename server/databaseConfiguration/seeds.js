@@ -35,13 +35,6 @@ const getRandomInt = (max, min = 1) => {
 
 const generateArr = num => Array.from(new Array(num), (x, i) => i)
 
-const preSeed = async (tableName) => {
-  // drop the table before we seed
-  await dropTable(tableName)
-  // recreate the users table
-  await createTable(tableName)
-}
-
 const log = (numOfSeeds, tableName) => {
   console.log(`========== SEEDING ${numOfSeeds} to TABLE: ${tableName} ===========`)
 }
