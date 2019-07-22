@@ -43,8 +43,6 @@ const log = (numOfSeeds, tableName) => {
 const createUsers = async () => {
   const tableName = 'users'
   const numOfSeeds = numOfUsers
-  // clear previous records and start table fresh
-  // await preSeed(tableName)
   // create an array for he number of recrods to seed
   const arr = generateArr(numOfSeeds)
   log(numOfSeeds, tableName)
@@ -67,7 +65,6 @@ const createUsers = async () => {
 const createContacts = async () => {
   const tableName = 'contacts'
   const numOfSeeds = 40
-  // await preSeed(tableName)
   const arr = generateArr(numOfSeeds)
   log(numOfSeeds, tableName)
   const queryText = `INSERT INTO "${tableName}"(fname, lname, phone, email, user_id) 

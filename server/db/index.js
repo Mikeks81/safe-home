@@ -19,8 +19,6 @@ export const dbEnv = () => {
   return dbCreds
 }
 
-console.log('~~~~~~~ ', dbEnv())
-
 const pool = new Pool(dbEnv());
 
 export default {
