@@ -18,13 +18,13 @@ exports.up = function(db) {
   return db.runSql(`CREATE TABLE IF NOT EXISTS
         coordinates(
           id SERIAL PRIMARY KEY,
-          time TIMESTAMP,
+          time TIMESTAMP WITH TIME ZONE ,
           lat FLOAT,
           long FLOAT,
           trip_id INTEGER NOT NULL,
-          created_at TIMESTAMP DEFAULT NOW(),
-          updated_at TIMESTAMP DEFAULT NOW(),
-          FOREIGN KEY (trip_id) REFERENCES coordinates (id) ON DELETE CASCADE
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+          updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+          FOREIGN KEY (trip_id) REFERENCES trips (id) ON DELETE CASCADE
         )`)
 };
 

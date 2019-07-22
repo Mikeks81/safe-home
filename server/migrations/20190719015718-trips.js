@@ -18,12 +18,12 @@ exports.up = function(db) {
   return db.runSql(`CREATE TABLE IF NOT EXISTS
       trips(
         id SERIAL PRIMARY KEY,
-        start TIMESTAMP,
-        finished TIMESTAMP,
+        start TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        finish TIMESTAMP WITH TIME ZONE,
         name TEXT,
         user_id INTEGER NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW(),
-        updated_at TIMESTAMP DEFAULT NOW(),
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
       )`)
 };
