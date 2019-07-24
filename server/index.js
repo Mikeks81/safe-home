@@ -4,6 +4,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import UserRoutes from './routes/users'
 import ContactRoutes from  './routes/contacts'
+import TripsRoutes from './routes/trips'
 
 const app = express()
 const port = process.env.PORT || 7321
@@ -21,6 +22,7 @@ app.get('/', (request, response) => {
 
 UserRoutes (app)
 ContactRoutes (app)
+TripsRoutes (app)
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, () => {

@@ -19,7 +19,7 @@ export const dbEnv = () => {
   return dbCreds
 }
 
-const pool = new Pool(dbEnv());
+export const pool = new Pool(dbEnv());
 
 export default {
   /**

@@ -32,11 +32,11 @@ describe("Users", () => {
 
     // Test to get single user record
     it("should not get a single user record", (done) => {
-      const id = 5;
+      const id = 'fakeid';
       chai.request(app)
         .get(`/users/${id}`)
         .end((err, res) => {
-          res.should.have.status(404);
+          res.should.have.status(400);
           done();
         });
     });

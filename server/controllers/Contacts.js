@@ -1,5 +1,4 @@
 import db from './helpers/DatabaseHelper'
-import moment from 'moment'
 
 class Contacts {
   async getAll (req, res) {

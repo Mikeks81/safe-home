@@ -18,7 +18,6 @@ class User {
     try {
       const { id } = req.params
       const { rows, rowCount } = await db.query(query, [id])
-      if (!rows.length) return res.status(404).send('User not found')
       return res.status(200).send({ rows, rowCount, params: req.params })
     } catch (err) {
       return res.status(400).send(err)
