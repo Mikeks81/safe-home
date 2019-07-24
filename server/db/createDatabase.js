@@ -1,15 +1,30 @@
 const { Pool } = require('pg')
-const { allDb, dbEnv } = require('./db_config')
+require('dotenv').config()
+const databaseConfig = require('../database.json')
 
-const { database, creds } = dbEnv
+const getDBCreds = (env = 'development') => {
+  const _dbCreds = databaseConfig[env]
+  const dbCreds = {}
+  Object.keys(_dbCreds).forEach(key => {
+    if (typeof _dbCreds[key] === 'object') {
+      const envVal = _dbCreds[key]['ENV']
+      dbCreds[key] = process.env[envVal]
+    } else {
+      dbCreds[key] = _dbCreds[key]
+    }
+  })
+  return dbCreds
+}
 
-const pool = new Pool({ creds })
+const { user, host, password, port } = getDBCreds()
 
-const createAllDBs = () => {
-  const dbsArr = Object.keys(allDb)
+const pool = new Pool({ user, host, password, port })
+
+const createAllDBs = async () => {
+  const dbsArr = Object.keys(databaseConfig)
   console.log(' ========== CREATING DATABASES ========== \r\n');
   const dbRequests = dbsArr.map(db => {
-    return createDB(allDb[db].database)
+    return createDB(getDBCreds(db).database)
   })
   return Promise.all(dbRequests, Promise.resolve(dbRequests))
 }

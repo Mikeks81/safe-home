@@ -7,6 +7,7 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "core-js": "^3.1.4",
+    "db-migrate-pg": "^1.0.0",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
@@ -33,6 +34,8 @@
     "test": "NODE_ENV=test mocha --require @babel/register --recursive **/*.test.js --exit",
     "build": "babel index.js --out-file build.js",
     "dev": "NODE_ENV=development babel-watch index.js",
-    "prod": "NODE_ENV=production index.js"
+    "prod": "NODE_ENV=production index.js",
+    "createDbs": "node --harmony ./db/createDatabase.js createAllDBs",
+    "seed": "node --harmony ./db/seeds.js"
   }
 }
