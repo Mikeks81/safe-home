@@ -35,7 +35,7 @@
     "build": "babel index.js --out-file build.js",
     "dev": "NODE_ENV=development babel-watch index.js",
     "prod": "NODE_ENV=production index.js",
-    "createDbs": "node --harmony ./databaseConfiguration/createDatabase.js createAllDBs",
-    "seed": "node --harmony ./databaseConfiguration/seeds.js"
+    "createDbs": "node --harmony ./db/createDatabase.js createAllDBs",
+    "seed": "node --harmony ./db/seeds.js"
   }
 }

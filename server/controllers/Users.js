@@ -1,5 +1,5 @@
-import db from '../db'
-import Helper from './Helpers'
+import db from './helpers/DatabaseHelper'
+import Helper from './helpers/Helpers'
 import moment from 'moment'
 
 class User {
