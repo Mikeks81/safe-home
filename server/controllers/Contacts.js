@@ -25,7 +25,7 @@ class Contacts {
                       WHERE user_id=$1 
                       AND contacts.id=$2`
       const { rows } = await db.query(query, [id, contact_id])
-      return res.status(200).send( rows )
+      return res.status(200).send({ rows })
     } catch (err) {
       res.status(400).send( err )
     }
