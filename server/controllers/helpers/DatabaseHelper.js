@@ -4,7 +4,7 @@ import databaseConfig from '../../database.json'
 
 dotenv.config();
 
-export const dbEnv = () => {
+const dbEnv = () => {
   const env = process.env.NODE_ENV || 'development'
   const _dbCreds = databaseConfig[env]
   const dbCreds = {}
@@ -22,6 +22,8 @@ export const dbEnv = () => {
 const pool = new Pool(dbEnv());
 
 export default {
+  pool,
+  dbEnv: dbEnv(),
   /**
    * DB Query
    * @param {string} text

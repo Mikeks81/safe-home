@@ -2,8 +2,7 @@ import "core-js/stable"
 import "regenerator-runtime/runtime"
 import express from 'express'
 import bodyParser from 'body-parser'
-import UserRoutes from './routes/users'
-import ContactRoutes from  './routes/contacts'
+import routes from "./routes";
 
 const app = express()
 const port = process.env.PORT || 7321
@@ -19,8 +18,7 @@ app.get('/', (request, response) => {
   response.json({ info: 'Node.js, Express, and Postgres API' })
 })
 
-UserRoutes (app)
-ContactRoutes (app)
+routes(app)
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, () => {

@@ -36,6 +36,7 @@
     "dev": "NODE_ENV=development babel-watch index.js",
     "prod": "NODE_ENV=production index.js",
     "createDbs": "node --harmony ./db/createDatabase.js createAllDBs",
-    "seed": "node --harmony ./db/seeds.js"
+    "seed": "node --harmony ./db/seeds.js",
+    "seed:test": "db-migrate -e test up && NODE_ENV=test yarn seed"
   }
 }

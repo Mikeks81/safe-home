@@ -18,7 +18,6 @@ class User {
     try {
       const { id } = req.params
       const { rows, rowCount } = await db.query(query, [id])
-      if (!rows.length) return res.status(404).send('User not found')
       return res.status(200).send({ rows, rowCount, params: req.params })
     } catch (err) {
       return res.status(400).send(err)
@@ -72,7 +71,7 @@ class User {
       return res.status(404).send({ message: 'Missing Id'})
     }
     const getUser = 'SELECT * FROM users WHERE id = $1'
-    const updateUser = 'UPDATE users SET fname=$1, lname=$2, email=$3, phone=$4, modified_date=$5 WHERE id=$6 RETURNING *'
+    const updateUser = 'UPDATE users SET fname=$1, lname=$2, email=$3, phone=$4, updated_at=$5 WHERE id=$6 RETURNING *'
     try {
       const { rows } = await db.query(getUser, [id])
       if (!rows.length) {
