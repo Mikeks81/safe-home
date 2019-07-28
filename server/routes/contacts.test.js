@@ -8,7 +8,7 @@ import db from '../controllers/helpers/DatabaseHelper'
 chai.use(chaiHttp);
 chai.should();
 
-const tripQuery = `SELECT (id) FROM users LIMIT 1;`
+const usersQuery = `SELECT (id) FROM users ORDER BY id ASC LIMIT 1;`
 const contactsQuery = `SELECT (id) FROM contacts WHERE user_id=$1;`
 
 describe("Contacts", () => {
@@ -17,10 +17,10 @@ describe("Contacts", () => {
 
   before(async () => {
     try {
-      const { rows: usersRows } = await db.query(tripQuery)
+      const { rows: usersRows } = await db.query(usersQuery)
       userId = usersRows[0].id
-      const { rows: contactsRows } = await db.query(contactsQuery, [userId])
-      contactId = contactsRows[0].id
+      const { rows: contactRow } = await db.query(contactsQuery, [userId])
+      contactId = contactRow[0].id
     } catch (error) {
       console.log({ error })
       process.exit(1)
@@ -66,7 +66,6 @@ describe("Contacts", () => {
       chai.request(app)
         .put(`/user/${userId}/contact/${contactId}`)
         .end((err, res) => {
-          console.log({ res })
           res.should.not.have.status(404)
         })
     })
