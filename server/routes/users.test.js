@@ -23,7 +23,7 @@ describe("Users", () => {
     it("should get a single user record", (done) => {
       const id = 1
       chai.request(app)
-        .get(`/users/${id}`)
+        .get(`/user/${id}`)
         .end((err, res) => {
           res.should.have.status(200)
           res.body.should.be.a('object')
@@ -35,7 +35,7 @@ describe("Users", () => {
     it("should not get a single user record", (done) => {
       const id = 'fakeid'
       chai.request(app)
-        .get(`/users/${id}`)
+        .get(`/user/${id}`)
         .end((err, res) => {
           res.should.have.status(400)
           done()
@@ -43,6 +43,18 @@ describe("Users", () => {
     })
 
   })
+
+  describe('PUT/PATCH /users/:user_id', () => {
+    it('should not have status 404', () => {
+      const id = 1
+      chai.request(app)
+        .put(`/user/${id}`)
+        .end((err, res) => {
+          res.should.not.have.status(404)
+        })
+    });
+  })
+  
 
   describe('POST /users', () => {
     // Test user creation
@@ -63,7 +75,7 @@ describe("Users", () => {
     })
   })
   
-  describe('DELETE /users/:user_id', () => {
+  describe('DELETE /user/:user_id', () => {
     it('should delete a user record', async () => {
       const values = [
         faker.name.firstName(),
@@ -84,7 +96,7 @@ describe("Users", () => {
       try {
         const res = await chai
                     .request(app)
-                    .delete(`/users/${user.id}`)
+                    .delete(`/user/${user.id}`)
         res.should.have.status(204);
       } catch (err) {
         throw err

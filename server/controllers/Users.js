@@ -71,7 +71,7 @@ class User {
       return res.status(404).send({ message: 'Missing Id'})
     }
     const getUser = 'SELECT * FROM users WHERE id = $1'
-    const updateUser = 'UPDATE users SET fname=$1, lname=$2, email=$3, phone=$4, modified_date=$5 WHERE id=$6 RETURNING *'
+    const updateUser = 'UPDATE users SET fname=$1, lname=$2, email=$3, phone=$4, updated_at=$5 WHERE id=$6 RETURNING *'
     try {
       const { rows } = await db.query(getUser, [id])
       if (!rows.length) {

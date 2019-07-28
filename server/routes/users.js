@@ -5,8 +5,8 @@ export default function (app) {
  * USER routes
  */
   app.get('/users', User.getAll)
-  app.get('/users/:id', User.getOne)
+  app.get('/user/:id', User.getOne)
   app.post('/users', User.create)
-  app.put('/users/:id', User.update)
-  app.delete('/users/:id', User.delete)
+  app.put('/user/:id', User.update)
+  app.delete('/user/:id', User.delete)
 }

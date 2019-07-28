@@ -31,7 +31,7 @@ describe("Contacts", () => {
     // Test to get all Trips record
     it("should get all Trips records", (done) => {
       chai.request(app)
-        .get(`/users/${userId}/contacts`)
+        .get(`/user/${userId}/contacts`)
         .end((err, res) => {
           res.should.have.status(200)
           res.body.should.be.a('object')
@@ -41,7 +41,7 @@ describe("Contacts", () => {
     // Test to get single contact record
     it("should get a single contact record", (done) => {
       chai.request(app)
-        .get(`/users/${userId}/contacts/${contactId}`)
+        .get(`/user/${userId}/contact/${contactId}`)
         .end((err, res) => {
           res.should.have.status(200)
           res.body.should.be.a('object')
@@ -53,17 +53,31 @@ describe("Contacts", () => {
     it("should not get a single contacts record", (done) => {
       const id = 'fakeid'
       chai.request(app)
-        .get(`/users/${userId}/contacts/${id}`)
+        .get(`/user/${userId}/contact/${id}`)
         .end((err, res) => {
           res.should.have.status(400)
           done()
         })
     })
+  })
 
+  describe('PUT /user/:user_id/contact/:contact_id', () => {
+    it('should not have status 404', () => {
+      chai.request(app)
+        .put(`/user/${userId}/contact/${contactId}`)
+        .end((err, res) => {
+          console.log({ res })
+          res.should.not.have.status(404)
+        })
+    })
+  })
+  
+
+  describe('POST /user/:user_id/contacts', () => {
     // Test contact creation
     it('should create a new db record', (done) => {
       chai.request(app)
-        .post(`/users/${userId}/contacts`)
+        .post(`/user/${userId}/contacts`)
         .send({
           'fname': faker.name.firstName(),
           'lname': faker.name.lastName(),
@@ -76,5 +90,16 @@ describe("Contacts", () => {
           done()
         })
     })
+  })
+
+  describe('DELETE /user/:user_id/contact/:contact_id', () => {
+    it('should not have status 404', (done) => {
+      chai.request(app)
+        .delete(`/user/${userId}/contact/${contactId}`)
+        .end((err, res) => {
+          res.should.not.have.status(404)
+          done()
+        })
+    });
   })
 })
