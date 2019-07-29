@@ -1,5 +1,6 @@
-import db from './helpers/DatabaseHelper'
+import db from '../helpers/DatabaseHelper'
 import moment from 'moment'
+import ContactsHelper from '../helpers/ContactsHelper'
 
 class Contacts {
   async getAll (req, res) {
@@ -21,11 +22,8 @@ class Contacts {
     const { user_id, contact_id } = req.params
     if (!user_id || !contact_id) return res.status(400).send(`Please provide a user id or contact_id.`)
     try {
-      const query = `SELECT * 
-                      FROM contacts 
-                      WHERE user_id=$1 
-                      AND contacts.id=$2`
-      const { rows } = await db.query(query, [user_id, contact_id])
+      const rows = await ContactsHelper.getContact(user_id, contact_id)
+      if (!rows.length) return res.status(400).send('Contact not found')
       return res.status(200).send({ rows })
     } catch (err) {
       res.status(400).send( err )
@@ -34,23 +32,12 @@ class Contacts {
 
   async create (req, res) {
     const { user_id } = req.params
-    if (!user_id) return res.status(400).send(this.noUserIdMessage())
+    if (!user_id) return res.status(400).send('Please provide a user id.')
     try {
-      const { fname, lname, phone, email } = req.body
-      const query = `INSERT INTO contacts(fname, lname, phone, email, user_id) 
-                      VALUES ($1, $2, $3, $4, $5)
-                      RETURNING *`
-      const values = [
-        fname,
-        lname,
-        phone,
-        email,
-        user_id
-      ]
-
-      const { rows } = await db.query(query, values)
+      const rows = await ContactsHelper.create(req.body, user_id)
       return res.status(201).send( rows )
     } catch (err) {
+      console.log({ err })
       return res.status(400).send(err)
     }
   }

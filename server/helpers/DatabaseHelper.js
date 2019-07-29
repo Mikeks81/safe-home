@@ -1,6 +1,6 @@
 import { Pool } from 'pg'
 import dotenv from 'dotenv'
-import databaseConfig from '../../database.json'
+import databaseConfig from '../database.json'
 
 dotenv.config();
 

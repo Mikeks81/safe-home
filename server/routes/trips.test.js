@@ -2,12 +2,12 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../index';
-import db from '../controllers/helpers/DatabaseHelper'
+import db from '../helpers/DatabaseHelper'
 // Configure chai
 chai.use(chaiHttp);
 chai.should();
 
-const tripQuery = `SELECT (id) FROM users LIMIT 1;`
+const userQuery = `SELECT (id) FROM users ORDER BY id ASC LIMIT 1;`
 const tripsQuery = `SELECT (id) FROM trips WHERE user_id=$1;`
 
 describe("Trips", () => {
@@ -16,7 +16,7 @@ describe("Trips", () => {
 
   before(async () => {
     try {
-      const { rows: usersRows } = await db.query(tripQuery)
+      const { rows: usersRows } = await db.query(userQuery)
       userId = usersRows[0].id
       const { rows: tripsRows } = await db.query(tripsQuery, [userId])
       tripId = tripsRows[0].id

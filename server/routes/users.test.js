@@ -1,7 +1,7 @@
 import chai from 'chai'
 import chaiHttp from 'chai-http'
 import faker from 'faker'
-import db from '../controllers/helpers/DatabaseHelper'
+import db from '../helpers/DatabaseHelper'
 import app from '../index'
 // Configure chai
 chai.use(chaiHttp)

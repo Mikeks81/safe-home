@@ -1,4 +1,4 @@
-import db from './helpers/DatabaseHelper'
+import db from '../helpers/DatabaseHelper'
 
 class Trips {
   async getAll (req, res) {

@@ -3,7 +3,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import faker from 'faker'
 import app from '../index';
-import db from '../controllers/helpers/DatabaseHelper'
+import db from '../helpers/DatabaseHelper'
 // Configure chai
 chai.use(chaiHttp);
 chai.should();
