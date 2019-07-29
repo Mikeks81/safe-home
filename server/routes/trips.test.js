@@ -30,7 +30,7 @@ describe("Trips", () => {
     // Test to get all Trips record
     it("should get all Trips records", (done) => {
       chai.request(app)
-        .get(`/users/${userId}/trips`)
+        .get(`/user/${userId}/trips`)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -40,7 +40,7 @@ describe("Trips", () => {
     // Test to get single trip record
     it("should get a single trip record", (done) => {
       chai.request(app)
-        .get(`/users/${userId}/trips/${tripId}`)
+        .get(`/user/${userId}/trip/${tripId}`)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -52,7 +52,7 @@ describe("Trips", () => {
     it("should not get a single trips record", (done) => {
       const id = 'fakeid';
       chai.request(app)
-        .get(`/users/${userId}/trips/${id}`)
+        .get(`/user/${userId}/trip/${id}`)
         .end((err, res) => {
           res.should.have.status(400);
           done();
@@ -62,7 +62,7 @@ describe("Trips", () => {
     // Test trip creation
     it('should create a new db record', (done) => {
       chai.request(app)
-        .post(`/users/${userId}/trips`)
+        .post(`/user/${userId}/trips`)
         .send({
           'start': new Date() / 1000,
           'finish': null,

@@ -4,9 +4,9 @@ export default function (app) {
   /**
  * CONTACTS routes
  */
-  app.get('/users/:id/trips', Trips.getAll)
-  app.post('/users/:id/trips', Trips.create)
-  app.get('/users/:id/trips/:trips_id', Trips.getOne)
-  app.put('/users/:id/trips/:trips_id', Trips.update)
-  app.delete('/users/:id/trips/:trips_id', Trips.delete)
+  app.get('/user/:user_id/trips', Trips.getAll)
+  app.post('/user/:user_id/trips', Trips.create)
+  app.get('/user/:user_id/trip/:trip_id', Trips.getOne)
+  app.put('/user/:user_id/trip/:trip_id', Trips.update)
+  app.delete('/user/:user_id/trip/:trip_id', Trips.delete)
 }
