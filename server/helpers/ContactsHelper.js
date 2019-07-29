@@ -39,40 +39,42 @@ class ContactsHelper {
     }
   }
 
-  async update(attributes = {}, id) {
+  async update(attributes = {}, user_id, contact_id) {
     const { fname, lname, phone, email } = attributes
-    const updateUser = 'UPDATE users SET fname=$1, lname=$2, email=$3, phone=$4, updated_at=$5 WHERE id=$6 RETURNING *'
-    let user = null
+    const query = 'UPDATE contacts SET fname=$1, lname=$2, email=$3, phone=$4, updated_at=$5 WHERE user_id = $6 AND id = $7 RETURNING *'
+    let contact = null
     try {
-      user = await this.getUser(id)
+      contact = await this.getContact(user_id, contact_id)
     } catch (error) {
       console.log({ error })
     }
-    if (!user.length) {
-      return { error: 'Could not locate user.' }
+    if (!contact.length) {
+      return { error: 'Could not locate contact.' }
     }
 
     const updatedAttrs = [
-      fname || user[0].fname,
-      lname || user[0].lname,
-      email || user[0].email,
-      phone || user[0].phone,
+      fname || contact[0].fname,
+      lname || contact[0].lname,
+      email || contact[0].email,
+      phone || contact[0].phone,
       moment(new Date()),
-      id
+      user_id,
+      contact_id
     ]
 
     try {
-      return await db.query(updateUser, updatedAttrs)
+      const { rows } = await db.query(query, updatedAttrs)
+      return rows
     } catch (error) {
       console.log({ error })
       return { error }
     }
   }
 
-  async delete(id) {
-    const query = 'DELETE FROM users WHERE id = $1 RETURNING *'
+  async delete(user_id, contact_id) {
+    const query = `DELETE FROM contacts WHERE user_id=$1 AND id=$2 RETURNING *`
     try {
-      const { rows } = await db.query(query, [id])
+      const { rows } = await db.query(query, [user_id, contact_id])
       return rows
     } catch (error) {
       console.log(error)
