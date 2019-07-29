@@ -9,8 +9,7 @@ class TripsHelper {
                       WHERE user_id=$1 
                       AND trips.id=$2`
     try {
-      const { rows } = await db.query(query, [user_id, trip_id])
-      return rows
+      return await db.query(query, [user_id, trip_id])
     } catch (error) {
       return { error }
     }

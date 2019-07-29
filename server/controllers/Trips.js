@@ -1,4 +1,5 @@
 import db from '../helpers/DatabaseHelper'
+import TripsHelper from '../helpers/TripsHelper';
 
 class Trips {
   async getAll (req, res) {
@@ -20,13 +21,11 @@ class Trips {
     const { user_id, trip_id } = req.params
     if (!user_id || !trip_id) return res.status(400).send(`Please provide a user id or trips_id.`)
     try {
-      const query = `SELECT * 
-                      FROM trips 
-                      WHERE user_id=$1 
-                      AND trips.id=$2`
-      const { rows, rowCount } = await db.query(query, [user_id, trip_id])
+      const { rows, rowCount } = await TripsHelper.getTrip(user_id, trip_id)
+      if (!rows) return res.status(400).send('Could not locate trip')
       return res.status(200).send({ rows, rowCount })
     } catch (err) {
+      console.log({ err })
       return res.status(400).send(err)
     }
   }
@@ -35,23 +34,13 @@ class Trips {
     const { user_id } = req.params
     if (!user_id) return res.status(400).send('Provide a user id')
     try {
-      const { start, finish, name } = req.body
-      const query = `INSERT INTO trips(start, finish, name, user_id) 
-                      VALUES (to_timestamp($1), to_timestamp($2), $3, $4)
-                      RETURNING *`
-      const values = [
-        start,
-        finish,
-        name,
-        user_id
-      ]
-
-      const { rows } = await db.query(query, values)
+      const rows = await TripsHelper.create(req.body, user_id)
       return res.status(201).send(rows)
     } catch (err) {
       return res.status(400).send(err)
     }
   }
+
   async update (req, res) {
     
   }
