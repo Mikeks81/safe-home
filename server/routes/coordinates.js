@@ -1,4 +1,5 @@
 import Coordinates from '../controllers/Coordinates'
+
 const coordinateRoutes = (app) => {
   app.get('/trip/:trip_id/coordinates', Coordinates.getAll)
   app.post('/trip/:trip_id/coordinates', Coordinates.create)

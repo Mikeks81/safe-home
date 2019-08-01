@@ -31,8 +31,8 @@ class ContactsHelper {
     ]
 
     try {
-      const { rows } = await db.query(query, values)
-      return rows
+      const response = await db.query(query, values)
+      return response
     } catch (error) {
       console.log('errors ', error)
       return { error }
