@@ -58,7 +58,19 @@ describe("Trips", () => {
           done();
         });
     });
-
+  })
+  describe('PUT: /user/:user_id/trips/:trip_id', () => {
+    it('should not throw a 404', () => {
+      const id = 1
+      chai.request(app)
+        .put(`/user/${userId}/trip/${tripId}`)
+        .end((err, res) => {
+          res.should.not.have.status(404)
+        })
+    });
+  });
+  describe('POST: /user/:user_id/trips', () => {
+      
     // Test trip creation
     it('should create a new db record', (done) => {
       chai.request(app)
